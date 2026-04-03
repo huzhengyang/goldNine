@@ -1,0 +1,1 @@
+fatal: path 'src/app/news/\[id\]/page.tsx' does not exist in 'HEAD'

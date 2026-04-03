@@ -12,15 +12,45 @@ import {
   Filter,
   Map,
 } from 'lucide-react';
-import { Venue } from '@/types';
+import { ensureAuth, venuesCollection } from '@/lib/cloudbase';
+
+// 球房数据类型
+interface VenueItem {
+  _id: string;
+  name: string;
+  imageUrl?: string;
+  images?: string[];
+  description?: string;
+  address: string;
+  city?: string;
+  district?: string;
+  phone: string;
+  openTime?: string;
+  closeTime?: string;
+  rating: number;
+  reviewCount?: number;
+  priceMin?: number;
+  priceMax?: number;
+  tableCount?: {
+    chinese?: number;
+    american?: number;
+    snooker?: number;
+  };
+  tableBrand?: string;
+  facilities?: string[];
+  status?: string;
+  viewCount?: number;
+  createdAt?: any;
+  updatedAt?: any;
+}
 
 export default function VenuesPage() {
-  const [venues, setVenues] = useState<Venue[]>([]);
+  const [venues, setVenues] = useState<VenueItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeDistance, setActiveDistance] = useState('all');
   const [activePrice, setActivePrice] = useState('all');
   const [activeRating, setActiveRating] = useState('all');
-  const [sortBy, setSortBy] = useState('distance');
+  const [sortBy, setSortBy] = useState('rating');
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
 
   useEffect(() => {
@@ -30,76 +60,30 @@ export default function VenuesPage() {
   const fetchVenues = async () => {
     setLoading(true);
     try {
-      // 模拟API调用
-      const mockVenues: Venue[] = [
-        {
-          _id: '1',
-          name: '金桌球俱乐部',
-          cover_image: 'https://picsum.photos/800/600?random=50',
-          images: [],
-          description: '专业台球俱乐部，设施齐全，环境优雅',
-          address: '北京市朝阳区建国路88号',
-          city: '北京市',
-          district: '朝阳区',
-          location: { type: 'Point', coordinates: [116.46, 39.92] },
-          phone: '010-12345678',
-          business_hours: { start: '09:00', end: '23:00' },
-          rating: 4.8,
-          review_count: 328,
-          price_range: { min: 30, max: 30 },
-          tables: { chinese: 12, american: 8, british: 0 },
-          facilities: ['空调', 'WiFi', '餐饮', '休息区'],
-          status: 'open',
-          created_at: '2026-01-01T00:00:00Z',
-          updated_at: '2026-01-01T00:00:00Z',
-        },
-        {
-          _id: '2',
-          name: '星牌台球城',
-          cover_image: 'https://picsum.photos/800/600?random=51',
-          images: [],
-          description: '星牌品牌球房，专业球桌',
-          address: '北京市海淀区中关村大街66号',
-          city: '北京市',
-          district: '海淀区',
-          location: { type: 'Point', coordinates: [116.32, 39.98] },
-          phone: '010-87654321',
-          business_hours: { start: '10:00', end: '22:00' },
-          rating: 4.6,
-          review_count: 256,
-          price_range: { min: 25, max: 25 },
-          tables: { chinese: 20, american: 0, british: 4 },
-          facilities: ['空调', '休息区'],
-          status: 'open',
-          created_at: '2026-01-01T00:00:00Z',
-          updated_at: '2026-01-01T00:00:00Z',
-        },
-        {
-          _id: '3',
-          name: '台球之家',
-          cover_image: 'https://picsum.photos/800/600?random=52',
-          images: [],
-          description: '性价比高的台球俱乐部',
-          address: '北京市西城区西单北大街100号',
-          city: '北京市',
-          district: '西城区',
-          location: { type: 'Point', coordinates: [116.37, 39.91] },
-          phone: '010-11112222',
-          business_hours: { start: '08:00', end: '24:00' },
-          rating: 4.5,
-          review_count: 189,
-          price_range: { min: 20, max: 20 },
-          tables: { chinese: 15, american: 5, british: 0 },
-          facilities: ['空调', 'WiFi'],
-          status: 'open',
-          created_at: '2026-01-01T00:00:00Z',
-          updated_at: '2026-01-01T00:00:00Z',
-        },
-      ];
-
-      setVenues(mockVenues);
+      // 确保已登录
+      await ensureAuth();
+      
+      // 构建查询条件
+      let query = venuesCollection.where({
+        status: 'active'
+      });
+      
+      // 根据排序方式排序
+      const orderByField = sortBy === 'rating' ? 'rating' : 
+                          sortBy === 'popularity' ? 'viewCount' :
+                          sortBy === 'price' ? 'priceMin' : 'createdAt';
+      
+      // 查询数据
+      const result = await query
+        .orderBy(orderByField, 'desc')
+        .limit(20)
+        .get();
+      
+      console.log('球房数据:', result.data);
+      setVenues(result.data || []);
     } catch (error) {
       console.error('获取球房列表失败:', error);
+      setVenues([]);
     } finally {
       setLoading(false);
     }
@@ -271,11 +255,11 @@ export default function VenuesPage() {
                   {/* 图片 */}
                   <div className="relative sm:w-48 md:w-56 h-48 sm:h-auto flex-shrink-0">
                     <img
-                      src={venue.cover_image}
+                      src={venue.imageUrl || `https://picsum.photos/800/600?random=${venue._id}`}
                       alt={venue.name}
                       className="w-full h-full object-cover"
                     />
-                    {getStatusBadge(venue.status)}
+                    {getStatusBadge(venue.status || 'active')}
                   </div>
 
                   {/* 内容 */}
@@ -286,49 +270,49 @@ export default function VenuesPage() {
                       </h3>
                       <div className="flex items-center space-x-1 text-yellow-500">
                         <Star className="w-5 h-5 fill-current" />
-                        <span className="text-gray-900 font-semibold">{venue.rating}</span>
-                        <span className="text-gray-500 text-sm">({venue.review_count})</span>
+                        <span className="text-gray-900 font-semibold">{venue.rating || 0}</span>
+                        <span className="text-gray-500 text-sm">({venue.reviewCount || 0})</span>
                       </div>
                     </div>
 
                     <div className="flex items-center space-x-4 text-sm text-gray-600 mb-3">
                       <div className="flex items-center space-x-1">
                         <span className="text-green-700 font-semibold">
-                          ¥{venue.price_range.min}
+                          ¥{venue.priceMin || 20}-{venue.priceMax || 50}
                         </span>
                         <span>/小时</span>
                       </div>
                       <span>•</span>
                       <div className="flex items-center space-x-1">
                         <MapPin className="w-4 h-4" />
-                        <span>1.2km</span>
+                        <span>{venue.district || ''}</span>
                       </div>
                       <span>•</span>
                       <div className="flex items-center space-x-1">
                         <Clock className="w-4 h-4" />
                         <span>
-                          {venue.business_hours.start}-{venue.business_hours.end}
+                          {venue.openTime || '09:00'}-{venue.closeTime || '23:00'}
                         </span>
                       </div>
                     </div>
 
                     <div className="flex flex-wrap gap-2 mb-3">
-                      {venue.tables.chinese > 0 && (
+                      {venue.tableCount && venue.tableCount.chinese && venue.tableCount.chinese > 0 && (
                         <span className="px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs">
-                          中式{venue.tables.chinese}桌
+                          中式{venue.tableCount.chinese}桌
                         </span>
                       )}
-                      {venue.tables.american > 0 && (
+                      {venue.tableCount && venue.tableCount.american && venue.tableCount.american > 0 && (
                         <span className="px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs">
-                          美式{venue.tables.american}桌
+                          美式{venue.tableCount.american}桌
                         </span>
                       )}
-                      {venue.tables.british > 0 && (
+                      {venue.tableCount && venue.tableCount.snooker && venue.tableCount.snooker > 0 && (
                         <span className="px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs">
-                          英式{venue.tables.british}桌
+                          斯诺克{venue.tableCount.snooker}桌
                         </span>
                       )}
-                      {venue.facilities.map((facility, index) => (
+                      {venue.facilities && venue.facilities.map((facility, index) => (
                         <span
                           key={index}
                           className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs"
