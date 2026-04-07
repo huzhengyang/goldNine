@@ -2,7 +2,7 @@ import cloudbase from '@cloudbase/js-sdk';
 
 // 初始化 CloudBase SDK
 export const app = cloudbase.init({
-  env: process.env.NEXT_PUBLIC_CLOUDBASE_ENV_ID || 'bluetooth-website-3eyhlocfe7b405'
+  env: process.env.NEXT_PUBLIC_CLOUDBASE_ENV_ID || 'goldnine-hk-8g3g5ijhec9df56e'
 });
 
 // 获取数据库引用

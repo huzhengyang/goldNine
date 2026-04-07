@@ -1,0 +1,9 @@
+{
+  "name": "github-register-task",
+  "version": "1.0.0",
+  "description": "GitHub注册任务管理",
+  "main": "index.js",
+  "dependencies": {
+    "@cloudbase/node-sdk": "^2.5.0"
+  }
+}

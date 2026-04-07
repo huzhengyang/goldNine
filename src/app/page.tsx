@@ -262,7 +262,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto text-center">
           <div className="mb-4">
             <span className="text-2xl">🎱</span>
-            <span className="ml-2 font-bold text-lg">GoldNine 台球门户</span>
+            <span className="ml-2 font-bold text-lg">GoldNine Kiro</span>
           </div>
           <p className="text-gray-400 text-sm">
             © 2026 GoldNine.cn 版权所有

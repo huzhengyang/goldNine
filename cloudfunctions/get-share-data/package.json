@@ -1,0 +1,9 @@
+{
+  "name": "get-share-data",
+  "version": "1.0.0",
+  "description": "获取分享数据",
+  "main": "index.js",
+  "dependencies": {
+    "@cloudbase/node-sdk": "^2.5.0"
+  }
+}

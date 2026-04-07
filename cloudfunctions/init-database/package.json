@@ -1,9 +1,9 @@
 {
   "name": "init-database",
   "version": "1.0.0",
-  "description": "初始化数据库集合和索引",
+  "description": "初始化数据库集合",
   "main": "index.js",
   "dependencies": {
-    "@cloudbase/node-sdk": "^2.8.0"
+    "@cloudbase/node-sdk": "^2.5.0"
   }
 }

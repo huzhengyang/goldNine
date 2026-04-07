@@ -193,7 +193,7 @@ export default function NewsPage() {
             {newsList.map((news) => (
               <Link
                 key={news._id}
-                href={`/news/${news._id}`}
+                href={`/news/detail?id=${news._id}`}
                 className="block bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden"
               >
                 <div className="flex flex-col sm:flex-row">

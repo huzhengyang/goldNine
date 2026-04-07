@@ -1,0 +1,7 @@
+{
+  "name": "register-github",
+  "version": "1.0.0",
+  "description": "注册GitHub账户",
+  "main": "index.js",
+  "dependencies": {}
+}

@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "GoldNine 台球门户 - AI动作分析，让训练更智能",
-  description: "GoldNine是中国领先的台球智能服务平台，提供AI动作分析、球房预订、赛事报名、助教预约等专业服务",
-  keywords: "台球,斯诺克,美式台球,中式台球,AI动作分析,球房预订,赛事报名,台球教练",
+  title: "GoldNine Kiro - 500 pro 1000 2000 10000",
+  description: "批发 零售  欢迎咨询",
+  keywords: "token Goldnine kiro",
 };
 
 export default function RootLayout({

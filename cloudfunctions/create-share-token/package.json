@@ -1,0 +1,9 @@
+{
+  "name": "create-share-token",
+  "version": "1.0.0",
+  "description": "创建分享 token",
+  "main": "index.js",
+  "dependencies": {
+    "@cloudbase/node-sdk": "^2.5.0"
+  }
+}

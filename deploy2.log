@@ -1,0 +1,17 @@
+CloudBase CLI 3.0.1
+试试 tcb ai 命令，开启 AI 原生开发
+- 数据加载中...
+ℹ 未找到配置文件，将从当前目录部署云函数
+? 检测到云端已存在函数 [account-manager]，是否覆盖更新？ (y/N) [63D[63C[2K[G? 检测到云端已存在函数 [account-manager]，是否覆盖更新？ (y/N) y[64D[64C[2K[G? 检测到云端已存在函数 [account-manager]，是否覆盖更新？ (y/N) y [65D[65C[2K[G? 检测到云端已存在函数 [account-manager]，是否覆盖更新？ Yes[60D[60C
+ 
+ℹ ✓ 函数已存在，将使用以下合并配置更新：
+ℹ 函数 [account-manager] 最终配置：
+ℹ   类型: Event
+ℹ   运行时: Nodejs18.15
+ℹ   入口: index.main
+ℹ   超时: 15s
+ℹ   (配置来源: 智能推测)
+? 请选择操作 (Use arrow keys)
+> 使用合并配置更新 
+  手动输入配置 
+  退出 [7D[7C
